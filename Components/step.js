@@ -1,4 +1,4 @@
-class steps {
+class Step {
   //store the steps template here.
   constructor(props){
     //initialize each step here.

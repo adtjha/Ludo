@@ -1,7 +1,6 @@
-class center {
+class Center {
   constructor(props){
     //initialize center from here.
-    this.spacing = props.spacing;
     this.start = props.start;
     this.end = props.end;
   }

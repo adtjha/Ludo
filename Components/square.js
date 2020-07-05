@@ -1,12 +1,12 @@
-class squares {
+class Square {
   //store the square template here.
   constructor(props){
     //initialize the squares from here.
-    super(props);
     this.start = props.start;
     this.end = props.end;
-    this.spacing = props.spacing;
+    this.home = props.home;
     this.color = props.color;
+    this.spacing = props.spacing;
   }
   
   update(){
@@ -15,16 +15,13 @@ class squares {
   }
   
   render(){
-    const e = this;
-    const spacing = this.spacing;
-    //render the squares from here.
     push();
         rectMode(CORNER);
         fill(125);
-        rect(e.start.x * spacing, e.start.y * spacing, (e.end.x + 1) * spacing, (e.end.y + 1) * spacing);
-        e.home.forEach(h => {
-          fill(e.color);
-          rect(h.x * spacing, h.y * spacing, spacing, spacing);
+        rect(this.start.x * this.spacing, this.start.y * this.spacing, (this.end.x + 1) * this.spacing, (this.end.y + 1) * this.spacing);
+        this.home.forEach(h => {
+          fill(this.color);
+          rect(h.x * this.spacing, h.y * this.spacing, this.spacing, this.spacing);
         });
     pop();
   }
