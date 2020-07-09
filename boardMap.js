@@ -1,7 +1,7 @@
 const boardSize = 500;
 const spacing = boardSize / 13;
 
-const LudoBoard = {
+const LudoMap = {
   squares: [{
     color: 'red',
     start: {

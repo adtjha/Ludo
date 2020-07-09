@@ -5,6 +5,10 @@ class Center {
     this.end = end;
     this.final = final;
     this.spacing = spacing;
+    
+    //this.location = createVector(x,y);
+    //this.spacing = spacing;
+    //this.reached = [];
   }
 
 

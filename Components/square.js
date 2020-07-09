@@ -2,15 +2,20 @@ class Square {
   //store the square template here.
   constructor(props) {
     //initialize the squares from here.
+    
     this.start = props.start;
     this.end = props.end;
+    //this.location = createVector(props.start, props.end);
+    
     this.home = props.home;
+    
     this.color = props.color;
     this.players = props.players;
     this.spacing = props.spacing;
     this.stepStart = props.stepStart;
     this.stepFinal = props.stepFinal;
     this.final = props.final;
+    //this.path = { start: props.stepStart, final: props.stepFinal, end: props.final};
   }
 
   update() {
