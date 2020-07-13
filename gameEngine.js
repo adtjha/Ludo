@@ -28,3 +28,66 @@ Basic Functions that will be called during the game.
   9.  REPEAT THE PROCESS, TILL WINNER, OR GAME ABORTED.
   
 */
+
+class Game {
+  constructor(props){
+    this.players = props.players;
+    this.currentIndex = 3;
+    this.currentDiceNumber = '';
+    //Wait for User to select the piece.
+    this.selectedPiece = {};
+  }
+  
+  play(){
+    this.stop = false;
+    while(this.stop){
+      //Switches the current Player.
+      this.switchPlayer();
+      
+      //Wait for the user to roll the Dice.
+      this.rollDice();
+      
+      //Move the selected Piece.
+      this.movePiece(this.selectedPiece);
+    }
+  }
+  
+  
+  
+  abort(){
+    this.stop = true;
+  }
+  
+  switchPlayer(){
+    this.currentIndex = this.players.findIndex(player => player === this.currentPlayer);
+    if(this.currentIndex === 3){
+      this.currentIndex = 0;
+    } else {
+      this.currentIndex++;
+    }
+    this.currentPlayer = this.players[this.currentIndex];
+  }
+  
+  rollDice(){
+    this.props.rollDice();
+    return;
+  }
+  
+  movePiece(selectedPiece){
+    var currentStep = this.currentPlayer[selectedPiece].path.step,
+        nextStep = currentStep++,
+        nextStepObject = this.steps[nextStep];
+  
+    if(!this.checkOthers(nextStepObject)){
+      if(nextStepObject.safeStep){
+        this.currentPlayer[selectedPiece].path.step = nextStep;
+      } else {
+        //Show the currentUser choice to eliminate from the present pieces in that step.
+        //send the selected piece back to its home.
+        this.players[this.choice.player].piece[this.choice].position = -1;
+        this.currentPlayer[selectedPiece].path.step = nextStep;
+      }
+    }  
+  }
+  
+}

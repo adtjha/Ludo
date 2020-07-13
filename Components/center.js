@@ -1,19 +1,21 @@
 class Center {
   constructor(start, end, spacing, final) {
     //initialize center from here.
-    this.start = start;
-    this.end = end;
-    this.final = final;
-    this.spacing = spacing;
     
     //this.location = createVector(x,y);
+    this.start = start;
+    this.end = end;
+    
+    this.final = final;
+    
+    this.spacing = spacing;
     //this.spacing = spacing;
     //this.reached = [];
   }
 
-
   update() {
     //update the center state from here.
+    
   }
 
   render() {

@@ -8,10 +8,7 @@ const LudoMap = {
       x: 0,
       y: 0
     },
-    end: {
-      x: 4,
-      y: 4
-    },
+    size: 5,
     home: [{
       x: 1,
       y: 1
@@ -28,28 +25,28 @@ const LudoMap = {
     players: [{
       isThere: true,
       icon: 'R1',
-      where: {
+      location: {
         x: 1.5,
         y: 1.5
       }
     }, {
       isThere: true,
       icon: 'R2',
-      where: {
+      location: {
         x: 1.5,
         y: 3.5
       }
     }, {
       isThere: true,
       icon: 'R3',
-      where: {
+      location: {
         x: 3.5,
         y: 1.5
       }
     }, {
       isThere: true,
       icon: 'R4',
-      where: {
+      location: {
         x: 3.5,
         y: 3.5
       }
@@ -81,10 +78,7 @@ const LudoMap = {
       x: 0,
       y: 8
     },
-    end: {
-      x: 4,
-      y: 12
-    },
+    size: 5,
     home: [{
       x: 1,
       y: 9
@@ -101,28 +95,28 @@ const LudoMap = {
     players: [{
       isThere: true,
       icon: 'Y1',
-      where: {
+      location: {
         x: 1.5,
         y: 9.5
       }
     }, {
       isThere: true,
       icon: 'Y2',
-      where: {
+      location: {
         x: 1.5,
         y: 11.5
       }
     }, {
       isThere: true,
       icon: 'Y3',
-      where: {
+      location: {
         x: 3.5,
         y: 9.5
       }
     }, {
       isThere: true,
       icon: 'Y4',
-      where: {
+      location: {
         x: 3.5,
         y: 11.5
       }
@@ -154,10 +148,7 @@ const LudoMap = {
       x: 8,
       y: 0
     },
-    end: {
-      x: 12,
-      y: 4
-    },
+    size: 5,
     home: [{
       x: 9,
       y: 1
@@ -174,28 +165,28 @@ const LudoMap = {
     players: [{
       isThere: true,
       icon: 'G1',
-      where: {
+      location: {
         x: 9.5,
         y: 1.5
       }
     }, {
       isThere: true,
       icon: 'G2',
-      where: {
+      location: {
         x: 11.5,
         y: 1.5
       }
     }, {
       isThere: true,
       icon: 'G3',
-      where: {
+      location: {
         x: 9.5,
         y: 3.5
       }
     }, {
       isThere: true,
       icon: 'G4',
-      where: {
+      location: {
         x: 11.5,
         y: 3.5
       }
@@ -227,10 +218,7 @@ const LudoMap = {
       x: 8,
       y: 8
     },
-    end: {
-      x: 12,
-      y: 12
-    },
+    size: 5,
     home: [{
       x: 9,
       y: 9
@@ -247,28 +235,28 @@ const LudoMap = {
     players: [{
       isThere: true,
       icon: 'B1',
-      where: {
+      location: {
         x: 9.5,
         y: 9.5
       }
     }, {
       isThere: true,
       icon: 'B2',
-      where: {
+      location: {
         x: 9.5,
         y: 11.5
       }
     }, {
       isThere: true,
       icon: 'B3',
-      where: {
+      location: {
         x: 11.5,
         y: 9.5
       }
     }, {
       isThere: true,
       icon: 'B4',
-      where: {
+      location: {
         x: 11.5,
         y: 11.5
       }
@@ -316,3 +304,5 @@ const LudoMap = {
     }
   }
 }
+
+//Steps : creating steps using above given co-ordinates, and then assigning them a particular id.
