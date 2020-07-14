@@ -6,6 +6,7 @@ class dice{
     this.spacing = 500/13;
     this.changed = false;
     this.current = this.getRandom();
+    this.show = true;
   }
   
   getRandom(){
@@ -13,29 +14,33 @@ class dice{
   }
   
   onclick(){
+    this.show = false;
     var randomArray = [], currentRandom;
     for(var i = 0; i < 1000; i++){
       currentRandom = this.getRandom();
       this.current = currentRandom;
       randomArray.push(currentRandom);
-      this.render();
     }
     this.current = random(randomArray);
     this.changed = true;
+    setTimeout(()=>{this.show = true;}, 1000);
   }
   
   render(){
     push();
-    fill('cyan');
-    rect(this.location.x, this.location.y, this.spacing, this.spacing);
-    fill(0);
-    textSize(32);
-    text(this.current, this.location.x+10, this.location.y+30);
-    if(this.changed){
-      textSize(256);
-      text(this.current, 180, 300);
-      setTimeout(()=>{this.changed = false;}, 600);
-    }
+      if(this.show){
+        fill('cyan');
+        rect(this.location.x, this.location.y, this.spacing, this.spacing);
+        fill(0);
+        textSize(32);
+        text(this.current, this.location.x+10, this.location.y+30);
+      }
+      if(this.changed){
+        fill(0);
+        textSize(256);
+        text(this.current, 180, 300);
+        setTimeout(()=>{this.changed = false;}, 600);
+      }
     pop();
   }
 }

@@ -9,25 +9,16 @@ const LudoMap = {
       y: 0
     },
     size: 5,
-    home: [{
-      x: 1,
-      y: 1
-    }, {
-      x: 1,
-      y: 3
-    }, {
-      x: 3,
-      y: 1
-    }, {
-      x: 3,
-      y: 3
-    }],
     players: [{
       isThere: true,
       icon: 'R1',
       location: {
         x: 1.5,
         y: 1.5
+      },
+      home: {
+        x: 1,
+        y: 1
       }
     }, {
       isThere: true,
@@ -35,13 +26,21 @@ const LudoMap = {
       location: {
         x: 1.5,
         y: 3.5
-      }
+      },
+      home: {
+        x: 1,
+        y: 3
+      } 
     }, {
       isThere: true,
       icon: 'R3',
       location: {
         x: 3.5,
         y: 1.5
+      },
+      home: {
+        x: 3,
+        y: 1
       }
     }, {
       isThere: true,
@@ -49,6 +48,10 @@ const LudoMap = {
       location: {
         x: 3.5,
         y: 3.5
+      },
+      home: {
+        x: 3,
+        y: 3
       }
     }],
     stepStart: {
@@ -79,25 +82,16 @@ const LudoMap = {
       y: 8
     },
     size: 5,
-    home: [{
-      x: 1,
-      y: 9
-    }, {
-      x: 1,
-      y: 11
-    }, {
-      x: 3,
-      y: 9
-    }, {
-      x: 3,
-      y: 11
-    }],
     players: [{
       isThere: true,
       icon: 'Y1',
       location: {
         x: 1.5,
         y: 9.5
+      },
+      home: {
+        x: 1,
+        y: 9
       }
     }, {
       isThere: true,
@@ -105,6 +99,10 @@ const LudoMap = {
       location: {
         x: 1.5,
         y: 11.5
+      },
+      home: {
+        x: 1,
+        y: 11
       }
     }, {
       isThere: true,
@@ -112,6 +110,10 @@ const LudoMap = {
       location: {
         x: 3.5,
         y: 9.5
+      },
+      home: {
+        x: 3,
+        y: 9
       }
     }, {
       isThere: true,
@@ -119,6 +121,10 @@ const LudoMap = {
       location: {
         x: 3.5,
         y: 11.5
+      },
+      home: {
+        x: 3,
+        y: 11
       }
     }],
     stepStart: {
@@ -149,25 +155,16 @@ const LudoMap = {
       y: 0
     },
     size: 5,
-    home: [{
-      x: 9,
-      y: 1
-    }, {
-      x: 11,
-      y: 1
-    }, {
-      x: 9,
-      y: 3
-    }, {
-      x: 11,
-      y: 3
-    }],
     players: [{
       isThere: true,
       icon: 'G1',
       location: {
         x: 9.5,
         y: 1.5
+      },
+      home: {
+        x: 9,
+        y: 1
       }
     }, {
       isThere: true,
@@ -175,6 +172,10 @@ const LudoMap = {
       location: {
         x: 11.5,
         y: 1.5
+      },
+      home: {
+        x: 11,
+        y: 1
       }
     }, {
       isThere: true,
@@ -182,6 +183,10 @@ const LudoMap = {
       location: {
         x: 9.5,
         y: 3.5
+      },
+      home: {
+        x: 9,
+        y: 3
       }
     }, {
       isThere: true,
@@ -189,6 +194,10 @@ const LudoMap = {
       location: {
         x: 11.5,
         y: 3.5
+      },
+      home: {
+        x: 11,
+        y: 3
       }
     }],
     stepStart: {
@@ -219,25 +228,16 @@ const LudoMap = {
       y: 8
     },
     size: 5,
-    home: [{
-      x: 9,
-      y: 9
-    }, {
-      x: 9,
-      y: 11
-    }, {
-      x: 11,
-      y: 9
-    }, {
-      x: 11,
-      y: 11
-    }],
     players: [{
       isThere: true,
       icon: 'B1',
       location: {
         x: 9.5,
         y: 9.5
+      },
+      home: {
+        x: 9,
+        y: 9
       }
     }, {
       isThere: true,
@@ -245,6 +245,10 @@ const LudoMap = {
       location: {
         x: 9.5,
         y: 11.5
+      },
+      home: {
+        x: 9,
+        y: 11
       }
     }, {
       isThere: true,
@@ -252,6 +256,10 @@ const LudoMap = {
       location: {
         x: 11.5,
         y: 9.5
+      },
+      home: {
+        x: 11,
+        y: 9
       }
     }, {
       isThere: true,
@@ -259,6 +267,10 @@ const LudoMap = {
       location: {
         x: 11.5,
         y: 11.5
+      },
+      home: {
+        x: 11,
+        y: 11
       }
     }],
     stepStart: {

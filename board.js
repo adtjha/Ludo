@@ -1,7 +1,6 @@
 /*
   What to correct ?
     1. Squares
-      + drawing technique - use of createVertex,
       + homeSquares - use of createVertex,
       + path - create and store path,
           + finalSquares - last 4 steps.
