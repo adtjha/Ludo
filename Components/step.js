@@ -36,7 +36,11 @@ class Step {
 
   mouseClicked(e) {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.size))) {
-      console.log(this.id, this.location.x, this.location.y, this.size);
+      console.log(this.x, this.y);
+      return ({
+        x: this.x,
+        y: this.y
+      });
     }
   }
 

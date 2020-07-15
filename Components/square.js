@@ -30,7 +30,6 @@ class Square {
     //PATH: pieces which have reached the final succesfuly.
     this.final = props.final;
     //this.path = { start: props.stepStart, final: props.stepFinal, end: props.final};
-    console.log(this.location.x, this.location.y, this.size, this.size);
   }
 
   update() {
