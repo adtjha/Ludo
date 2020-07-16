@@ -25,16 +25,28 @@ class Square {
     this.stepStart = props.stepStart;
 
     //PATH: final step of player
-    this.stepFinal = props.stepFinal;
+    this.stepFinal = [];
+    
+    //Generating Final Squares.
+    props.stepFinal.forEach((f,i) => {
+      var finalStep = new Step(f.x, f.y, spacing, i);
+      finalStep.update('color', this.color);
+      finalStep.update('id', {count: (i+44), direction: 'DOWN', type: "FINAL", safe: true});
+      this.stepFinal.push(finalStep);
+    });
+    
 
     //PATH: pieces which have reached the final succesfuly.
-    this.final = props.final;
+    var final = new Step(props.final.x, props.final.y, spacing, 48);
+    final.update('color', this.color);
+    this.final = final;
+    
     //this.path = { start: props.stepStart, final: props.stepFinal, end: props.final};
   }
 
   update() {
     //update the squares from here.
-
+    
   }
 
   mouseClicked(e) {
@@ -47,6 +59,11 @@ class Square {
         }
       });
     }
+    this.stepFinal.forEach(step => {
+      step.mouseClicked(e)
+    });
+    
+    this.final.mouseClicked(e);
   }
 
   render() {
@@ -54,12 +71,16 @@ class Square {
     push();
     //Darwing base Squares. using the CORNER method.
     rectMode(CORNER);
-    fill(180);
-    if(this.highlight){stroke(this.color);strokeWeight(20);}
-    rect(this.location.x, this.location.y, this.size, this.size);
+      fill(180);
+      //check if this square's turn.
+      if(this.highlight){stroke(this.color);strokeWeight(20);}
+      rect(this.location.x, this.location.y, this.size, this.size);
     pop();
     
+    this.stepFinal.forEach(step => step.render());
     
+    this.final.render();
+  
     //Drawing Players if they are there.
     this.players.forEach(p => {
       push();

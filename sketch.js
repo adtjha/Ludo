@@ -5,14 +5,13 @@ function setup() {
 }
 
 function draw() {
-  background(51);
+  background(255);
   game.render();
-  
-//  dice.render();
 }
 
 function mouseClicked(e){
-  if((e.x > 300 && e.x < 340) && (e.y > 560 && e.y < 600)){
+  var dice = game.dice.location, spacing = game.dice.spacing;
+  if((e.offsetX > dice.x && e.offsetX < dice.x+spacing) && (e.offsetY > dice.y && e.offsetY < dice.y+spacing)){
     game.dice.onclick();
   }
   game.mouseClicked(e);

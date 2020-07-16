@@ -5,6 +5,8 @@ class Step {
 
     this.x = x;
     this.y = y;
+    
+    this.count = count;
 
     this.location = createVector(x * spacing, y * spacing);
 
@@ -15,19 +17,21 @@ class Step {
     this.color = 155;
 
     this.id = {
-      count: count,
-      direction: 'UP',
-      type: 'COMMON',
+      type: COMMON,
       safe: false
     };
     
-    this.count = count;
+    //console.log(this.id);
     
-    this.direction = 'UP';
     
-    this.type = 'COMMON';
     
-    this.safe = false;
+//    this.count = count;
+//    
+//    this.direction = 'UP';
+//    
+//    this.type = 'COMMON';
+//    
+//    this.safe = false;
 
 
     //this.type = 'final' || 'common' || 'end';
@@ -36,11 +40,7 @@ class Step {
 
   mouseClicked(e) {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.size))) {
-      console.log(this.x, this.y);
-      return ({
-        x: this.x,
-        y: this.y
-      });
+      console.log(this.id);
     }
   }
 
