@@ -5,7 +5,7 @@ class Step {
 
     this.x = x;
     this.y = y;
-    
+
     this.count = count;
 
     this.location = createVector(x * spacing, y * spacing);
@@ -20,27 +20,20 @@ class Step {
       type: COMMON,
       safe: false
     };
-    
-    //console.log(this.id);
-    
-    
-    
-//    this.count = count;
-//    
-//    this.direction = 'UP';
-//    
-//    this.type = 'COMMON';
-//    
-//    this.safe = false;
 
+  }
 
-    //this.type = 'final' || 'common' || 'end';
-    //this.safe = true || false;
+  getLocation() {
+    return ({
+      x: this.x,
+      y: this.y
+    });
   }
 
   mouseClicked(e) {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.size))) {
-      console.log(this.id);
+      console.log(this.count, this.x, this.y);
+      console.log('');
     }
   }
 

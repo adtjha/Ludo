@@ -24,6 +24,10 @@ class dice{
     this.current = random(randomArray);
     this.changed = true;
     setTimeout(()=>{this.show = true;}, 1000);
+    
+    if(this.current === 6){
+      console.info("SIX")
+    }
   }
   
   render(){
