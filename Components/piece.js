@@ -6,9 +6,9 @@ class Piece {
     this.home = home;
 
     this.highlight = false;
-    
+
     this.spacing = spacing;
-    
+
     this.path = path;
 
     this.color = 0;
@@ -17,16 +17,26 @@ class Piece {
 
     this.icon = icon;
 
-    this.stepLocation = -1;
+    this.selected = false;
+
+    this.stepLocation = 0;
 
   }
 
-  update(location) {
+  update(choice, props) {
     //location
-    this.x = location.x;
-    this.y = location.y;
-    this.location = createVector(this.x * spacing, this.y * spacing);
-    console.log(this.location.x + (this.spacing * 0.5), this.location.y + (this.spacing * 0.5));
+    if (choice === 'move') {
+      this.x = props.x;
+      this.y = props.y;
+      this.location = createVector(this.x * spacing, this.y * spacing);
+      console.log(this.location.x + (this.spacing * 0.5), this.location.y + (this.spacing * 0.5));
+      switchPlayer();
+    } else if (choice === 'select') {
+      this.selected = true;
+      var location = this.path.location(this.path.count[this.stepLocation]);
+      console.log(this.path.count, this.color);
+      this.update('move', location);
+    }
   }
 
   render() {
@@ -49,4 +59,3 @@ class Piece {
     pop();
   }
 }
-

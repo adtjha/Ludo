@@ -7,9 +7,11 @@ class board {
     this.dice = new dice();
 
     //Initializes homeSquares
-    props.squares.forEach(e => {
+    props.squares.forEach((e,index) => {
       //spacing constant
       e.spacing = spacing;
+      
+      e.count = index;
 
       //creating new square from model SQUARE
       const square = new Square(e);
@@ -40,11 +42,16 @@ class board {
       }
       this.steps.push(step);
     });
+    
+    //Current Player Count
+    this.currentIndex = 0;
 
     //Setting up start squares.
     this.setSteps(this.squares);
   }
-
+  
+  
+  
   setSteps(squares) {
     squares.forEach(e => {
       //Coloring Start Squares
@@ -54,11 +61,13 @@ class board {
           s.id.type = 'START';
         }
       });
+      if(e.count === this.currentIndex){
+        this.update('switch', {count: this.currentIndex});
+      }
     });
   }
 
   update(choice, props) {
-
     //update the player's position from here.
     if (choice === 'move') {
       this.squares.forEach(square => {
@@ -74,7 +83,7 @@ class board {
         square.highlight = false
       });
       this.squares.forEach(square => {
-        if (square.color === props.color) {
+        if (square.count === props.count) {
           square.highlight = true;
         }
       })
@@ -89,9 +98,8 @@ class board {
     this.steps.forEach(step => {
       step.mouseClicked(e)
     });
-    
-    
   }
+  
 
   render() {
     this.steps.forEach(e => {
@@ -105,4 +113,5 @@ class board {
 
     this.dice.render();
   }
+
 }

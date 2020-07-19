@@ -31,25 +31,24 @@ Basic Functions that will be called during the game.
 
 class Game {
   constructor(props){
+    super();
     this.players = props.squares;
     this.currentIndex = 3;
-    this.currentDiceNumber = '';
+    this.dice = props.dice;
     //Wait for User to select the piece.
     this.selectedPiece = {};
   }
   
   play(){
-    this.stop = false;
-    while(this.stop){
       //Switches the current Player.
       this.switchPlayer();
+      this.dice.reset();
       
       //Wait for the user to roll the Dice.
-//      this.rollDice();
+      //this.rollDice();
       
       //Move the selected Piece.
-//      this.movePiece(this.selectedPiece);
-    }
+      //this.movePiece(this.selectedPiece);
   }
   
   abort(){
@@ -58,13 +57,14 @@ class Game {
   
   switchPlayer(){
     //switchPlayer(): switches the current player to the next player.
-    this.currentIndex = this.players.findIndex(player => player === this.currentPlayer);
+    this.currentIndex = this.players.findIndex(player => player.count === this.currentPlayer);
     if(this.currentIndex === 3){
       this.currentIndex = 0;
     } else {
       this.currentIndex++;
     }
     this.currentPlayer = this.players[this.currentIndex];
+    super.update('switch', {count: this.currentPlayer});
   }
   
   rollDice(){

@@ -2,11 +2,14 @@ class Square {
   //store the square template here.
   constructor(props) {
     //initialize the squares from here.
-
     this.x = props.start.x;
     this.y = props.start.y;
 
     this.highlight = false;
+    
+    this.moveAllowed = false;
+    
+    this.count = props.count;
 
     //spacing constant which is used to draw the spacing.
     this.spacing = props.spacing;
@@ -18,18 +21,7 @@ class Square {
     //this.players = props.players;
     this.players = [];
 
-    this.path = {
-      home: -1,
-      steps: [],
-      final: [44, 45, 46, 47],
-      end: 48
-    };
-
-    this.path.steps = props.path.slice(1, 44);
-
-
-
-
+    this.path = props.path;
 
     //this.location = createVector(props.start, props.end);
     this.location = createVector(this.x * this.spacing, this.y * this.spacing);
@@ -62,26 +54,22 @@ class Square {
 
     props.players.forEach(piece => {
       var path = {
-        home: {
-          count: -1,
-          location: piece.home
-        },
-        steps: {
-          count: this.path.steps,
-          location: (count) => {
+        count: this.path,
+        location: (count)=>{
+          if(count === -1){
+            //home
+            return piece.home;
+          } else if (count > -1 && count < 44){
+            //steps
             return game.steps.find(step => count === step.count).getLocation();
-          }
-        },
-        final: {
-          count: this.path.final,
-          location: (count) => {
+          } else if (count > 43 && count < 47){
+            //final
             return this.stepFinal.find(step => count === step.count).getLocation();
+          } else if (count === 48){
+            //end
+            return this.final.getLocation();
           }
         },
-        end: {
-          count: 48,
-          location: this.final.getLocation()
-        }
       }
       
       var newPiece = new Piece(piece.location.x, piece.location.y, piece.home, this.spacing, piece.icon, path);
@@ -89,6 +77,28 @@ class Square {
       this.players.push(newPiece);
     });
   
+  }
+  
+  isOut(){
+    var outside = 0;
+    this.players.forEach(player => {
+      if(player.stepLocation === -1){
+        console.log('INSIDE');
+      } else if (player.stepLocation > 0 && player.stepLocation < 44){
+        outside++;
+      }
+    });
+    if(outside < this.players.length && outside > 0){
+      return ({
+        state: true,
+        count: outside
+      });
+    } else {
+      return ({
+        state: false,
+        count: outside
+      });
+    }
   }
 
   update(props) {
@@ -106,7 +116,11 @@ class Square {
         var x = p.home.x * this.spacing,
           y = p.home.y * this.spacing;
         if ((e.offsetX > x && e.offsetX < (x + this.spacing)) && (e.offsetY > y && e.offsetY < (y + this.spacing))) {
-          console.log(this.color, p);
+          if(this.moveAllowed){
+            move('birth', {icon: p.icon});
+          } else {
+            console.log('CLICKED BUT NO MOVEMENT')
+          }
         }
       });
     }

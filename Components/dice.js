@@ -5,12 +5,18 @@ class dice{
     this.location = createVector(235, 545);
     this.spacing = 500/13;
     this.changed = false;
-    this.current = this.getRandom();
+    this.current = 'D';
     this.show = true;
   }
   
   getRandom(){
     return random(this.values);
+  }
+  
+  reset(){
+    this.changed = false;
+    this.current = 'D';
+    this.show = true;
   }
   
   onclick(){

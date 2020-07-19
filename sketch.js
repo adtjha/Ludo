@@ -1,4 +1,5 @@
 var game = {},
+  ludo = {},
   colors = ['yellow', 'blue', 'green', 'red'];
 
 function setup() {
@@ -16,16 +17,45 @@ function mouseClicked(e) {
     spacing = game.dice.spacing;
   if ((e.offsetX > dice.x && e.offsetX < dice.x + spacing) && (e.offsetY > dice.y && e.offsetY < dice.y + spacing)) {
     game.dice.onclick();
-    if (colors.length > 0) {
-      game.update('switch', {
-        color: colors.pop()
-      });
-    } else {
-      colors = ['yellow', 'blue', 'green', 'red'];
-      game.update('switch', {
-        color: colors.pop()
-      });
-    }
+    play();
   }
   game.mouseClicked(e);
+}
+
+
+
+function play() {
+  if (game.squares[game.currentIndex].isOut.state) {
+    game.squares[game.currentIndex].moveAllowed = true;
+  } else if (game.dice.current === 6) {
+    game.squares[game.currentIndex].moveAllowed = true;
+  } else {
+    switchPlayer();
+  }
+}
+
+function move(choice, props) {
+  //choice: type of movement.
+  if (choice === 'birth') {
+    game.squares[game.currentIndex].players.forEach(p => {
+      if (p.icon === props.icon) {
+        p.stepLocation += 1;
+        p.update('select');
+        console.log(p.stepLocation);
+      }
+    });
+  } else if (choice === 'aging') {
+    console.log('MOVE');
+  }
+}
+
+function switchPlayer() {
+  if (game.currentIndex === 3) {
+    game.currentIndex = 0;
+  } else {
+    game.currentIndex++;
+  }
+  game.update('switch', {
+    count: game.currentIndex
+  });
 }
