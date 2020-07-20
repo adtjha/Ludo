@@ -108,8 +108,12 @@ class board {
 
 
     this.squares.forEach(e => {
-      e.render()
+      if(e.count != this.currentIndex){
+        e.render();
+      }
     });
+    
+    this.squares[this.currentIndex].render();
 
     this.dice.render();
   }

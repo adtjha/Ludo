@@ -23,18 +23,21 @@ class Piece {
 
   }
 
+  mouseClicked(e) {
+    if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.spacing)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.spacing))) {
+      console.log('CLICKED');
+    }
+  }
+
   update(choice, props) {
     //location
     if (choice === 'move') {
       this.x = props.x;
       this.y = props.y;
       this.location = createVector(this.x * spacing, this.y * spacing);
-      console.log(this.location.x + (this.spacing * 0.5), this.location.y + (this.spacing * 0.5));
       switchPlayer();
     } else if (choice === 'select') {
-      this.selected = true;
       var location = this.path.location(this.path.count[this.stepLocation]);
-      console.log(this.path.count, this.color);
       this.update('move', location);
     }
   }
@@ -49,7 +52,7 @@ class Piece {
       strokeWeight(5);
       strokeJoin(ROUND);
     }
-    rect(this.home.x * this.spacing, this.home.y * this.spacing, this.spacing, this.spacing);
+    rect(this.home.x * this.spacing, this.home.y * this.spacing, this.spacing, this.spacing, 10);
     pop();
 
     push();

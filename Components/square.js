@@ -35,12 +35,10 @@ class Square {
 
     //Generating Final Squares.
     props.stepFinal.forEach((f, i) => {
-      var finalStep = new Step(f.x, f.y, spacing, i);
+      var finalStep = new Step(f.x, f.y, spacing, (i+44));
       finalStep.update('color', this.color);
       finalStep.update('id', {
-        count: (i + 44),
-        direction: 'DOWN',
-        type: "FINAL",
+        type: FINAL,
         safe: true
       });
       this.stepFinal.push(finalStep);
@@ -80,15 +78,15 @@ class Square {
   }
   
   isOut(){
-    var outside = 0;
+    var outside = [];
     this.players.forEach(player => {
       if(player.stepLocation === -1){
         console.log('INSIDE');
-      } else if (player.stepLocation > 0 && player.stepLocation < 44){
-        outside++;
+      } else if (player.stepLocation > 0 && player.stepLocation < 48){
+        outside.push(player.icon);
       }
     });
-    if(outside < this.players.length && outside > 0){
+    if(outside.length < this.players.length && outside.length > 0){
       return ({
         state: true,
         count: outside
@@ -113,13 +111,21 @@ class Square {
   mouseClicked(e) {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.size))) {
       this.players.forEach(p => {
-        var x = p.home.x * this.spacing,
-          y = p.home.y * this.spacing;
+        var x = p.location.x,
+          y = p.location.y;
         if ((e.offsetX > x && e.offsetX < (x + this.spacing)) && (e.offsetY > y && e.offsetY < (y + this.spacing))) {
           if(this.moveAllowed){
-            move('birth', {icon: p.icon});
+            //check if movement is valid
+            if(this.isOut().count.length < 1){
+              //no piece is out
+              move({icon: p.icon, count: 1});
+            } else if (this.isOut().count.length > 1){
+              //more than one is out
+              move({icon: p.icon, count: game.dice.current});
+            }
           } else {
-            console.log('CLICKED BUT NO MOVEMENT')
+            console.log('CLICKED BUT NO MOVEMENT ALLOWED');
+            p.mouseClicked(e);
           }
         }
       });

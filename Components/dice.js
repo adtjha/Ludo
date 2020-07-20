@@ -13,11 +13,11 @@ class dice{
     return random(this.values);
   }
   
-  reset(){
-    this.changed = false;
-    this.current = 'D';
-    this.show = true;
-  }
+//  reset(){
+//    this.changed = false;
+//    this.current = 0;
+//    this.show = true;
+//  }
   
   onclick(){
     this.show = false;
@@ -30,16 +30,12 @@ class dice{
     this.current = random(randomArray);
     this.changed = true;
     setTimeout(()=>{this.show = true;}, 1000);
-    
-    if(this.current === 6){
-      console.info("SIX")
-    }
   }
   
   render(){
     push();
       if(this.show){
-        fill('cyan');
+        fill('white');
         rect(this.location.x, this.location.y, this.spacing, this.spacing);
         fill(0);
         textSize(32);
