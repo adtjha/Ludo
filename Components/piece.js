@@ -23,22 +23,38 @@ class Piece {
 
   }
 
-  mouseClicked(e) {
+  mouseClicked(e, step) {
+    //moving piece when clicked on.
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.spacing)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.spacing))) {
-      console.log('CLICKED');
+      //Mouse Clicked.
+      console.log('Mouse Clicked on Piece  : ' + this.icon + ',  Move :  ' + game.dice.current);
+      if (this.stepLocation > 0) {
+        move({
+          icon: this.icon,
+          count: game.dice.current
+        });
+      }
     }
   }
 
   update(choice, props) {
     //location
     if (choice === 'move') {
+      console.log('updating the location of piece : ' + this.icon);
       this.x = props.x;
       this.y = props.y;
       this.location = createVector(this.x * spacing, this.y * spacing);
       switchPlayer();
     } else if (choice === 'select') {
+      console.info('selected : ' + this.icon);
       var location = this.path.location(this.path.count[this.stepLocation]);
-      this.update('move', location);
+      if(this.path.count[this.stepLocation+1])
+      {
+        this.update('move', location);
+      } else {
+        console.error('Piece  : '+this.icon +'  Reached');
+        switchPlayer();
+      }
     }
   }
 

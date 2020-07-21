@@ -6,9 +6,9 @@ class Square {
     this.y = props.start.y;
 
     this.highlight = false;
-    
+
     this.moveAllowed = false;
-    
+
     this.count = props.count;
 
     //spacing constant which is used to draw the spacing.
@@ -35,7 +35,7 @@ class Square {
 
     //Generating Final Squares.
     props.stepFinal.forEach((f, i) => {
-      var finalStep = new Step(f.x, f.y, spacing, (i+44));
+      var finalStep = new Step(f.x, f.y, spacing, (i + 44));
       finalStep.update('color', this.color);
       finalStep.update('id', {
         type: FINAL,
@@ -53,40 +53,40 @@ class Square {
     props.players.forEach(piece => {
       var path = {
         count: this.path,
-        location: (count)=>{
-          if(count === -1){
+        location: (count) => {
+          if (count === -1) {
             //home
             return piece.home;
-          } else if (count > -1 && count < 44){
+          } else if (count > -1 && count < 44) {
             //steps
             return game.steps.find(step => count === step.count).getLocation();
-          } else if (count > 43 && count < 47){
+          } else if (count > 43 && count < 47) {
             //final
             return this.stepFinal.find(step => count === step.count).getLocation();
-          } else if (count === 48){
+          } else if (count === 48) {
             //end
             return this.final.getLocation();
           }
         },
       }
-      
+
       var newPiece = new Piece(piece.location.x, piece.location.y, piece.home, this.spacing, piece.icon, path);
       newPiece.color = this.color;
       this.players.push(newPiece);
     });
-  
+
   }
-  
-  isOut(){
+
+  isOut() {
     var outside = [];
     this.players.forEach(player => {
-      if(player.stepLocation === -1){
+      if (player.stepLocation === -1) {
         console.log('INSIDE');
-      } else if (player.stepLocation > 0 && player.stepLocation < 48){
+      } else if (player.stepLocation > 0 && player.stepLocation < 48) {
         outside.push(player.icon);
       }
     });
-    if(outside.length < this.players.length && outside.length > 0){
+    if (outside.length < this.players.length && outside.length > 0) {
       return ({
         state: true,
         count: outside
@@ -114,15 +114,13 @@ class Square {
         var x = p.location.x,
           y = p.location.y;
         if ((e.offsetX > x && e.offsetX < (x + this.spacing)) && (e.offsetY > y && e.offsetY < (y + this.spacing))) {
-          if(this.moveAllowed){
+          if (this.moveAllowed && p.stepLocation === 0) {
             //check if movement is valid
-            if(this.isOut().count.length < 1){
-              //no piece is out
-              move({icon: p.icon, count: 1});
-            } else if (this.isOut().count.length > 1){
-              //more than one is out
-              move({icon: p.icon, count: game.dice.current});
-            }
+            console.log('Moving Out Of HOME');
+            move({
+              icon: p.icon,
+              count: 1
+            });
           } else {
             console.log('CLICKED BUT NO MOVEMENT ALLOWED');
             p.mouseClicked(e);

@@ -494,6 +494,7 @@ const LudoMap = {
   safeSteps: [1, 7, 12, 18, 23, 29, 34, 40],
 }
 
+ 
 //Steps : creating steps using above given co-ordinates, and then assigning them a particular id.
 
 

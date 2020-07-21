@@ -10,7 +10,13 @@ Remaining :
 var game = {},
   i = 0,
   ludo = {},
-  colors = ['yellow', 'blue', 'green', 'red'];
+  colors = ['yellow', 'blue', 'green', 'red'],
+  moveSound;
+
+function preload() {
+  soundFormats('mp3', 'ogg');
+  moveSound = loadSound('p5/Sounds/move');
+}
 
 function setup() {
   createCanvas(600, 600);
@@ -28,6 +34,7 @@ function mouseClicked(e) {
   if ((e.offsetX > dice.x && e.offsetX < dice.x + spacing) && (e.offsetY > dice.y && e.offsetY < dice.y + spacing)) {
     game.dice.onclick();
     play();
+    moveSound.play();
   }
   game.mouseClicked(e);
 }
@@ -39,9 +46,9 @@ function play() {
     //atleast one piece is out,
     if (game.squares[game.currentIndex].isOut().count.length === 1 && game.dice.current != 6) {
       //only one is out, so move it
-      console.log('only one is out, so move it');
       game.squares[game.currentIndex].players.forEach(p => {
         if (p.icon === game.squares[game.currentIndex].isOut().count[0]) {
+          console.log('only one is out, so move it');
           move({
             icon: p.icon,
             count: game.dice.current
@@ -65,10 +72,18 @@ function play() {
 function move(props) {
   game.squares[game.currentIndex].players.forEach(p => {
     if (p.icon === props.icon) {
-      p.stepLocation += props.count;
-      p.update('select');
+      console.info('Found Piece  : ' + p.icon);
+      if (p.stepLocation + props.count + 1 < p.path.count.length) {
+        console.info('MOVING : ' + props.count);
+        p.stepLocation += props.count;
+        p.update('select');
+      }
     }
   });
+}
+
+function rollDice(state){
+  game.dice.rollAllowed = state;
 }
 
 function switchPlayer() {
@@ -81,4 +96,5 @@ function switchPlayer() {
   game.update('switch', {
     count: game.currentIndex
   });
+  rollDice(true);
 }

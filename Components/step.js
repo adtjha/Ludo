@@ -32,8 +32,16 @@ class Step {
 
   mouseClicked(e) {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.size))) {
-      //Mouse Clicked.
-      console.log('Mouse Clicked on Step  : ' + this.count + ',  Color :  ' + this.color);
+      game.squares[game.currentIndex].players.forEach(p => {
+        //check if player is here,
+        if(p.path.count[p.stepLocation] === this.count){
+          //found piece, move it.
+          move({
+            icon: p.icon,
+            count: game.dice.current
+          })
+        }
+      })
     }
   }
 

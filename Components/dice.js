@@ -1,25 +1,34 @@
 class dice{
   constructor(){
     //this.location = createVector(x, y, size);
-    this.values = [1, 2, 3, 4, 5, 6];
+    this.values = [4, 5, 6];
     this.location = createVector(235, 545);
     this.spacing = 500/13;
     this.changed = false;
     this.current = 'D';
     this.show = true;
+    this.rollAllowed = true;
   }
   
   getRandom(){
     return random(this.values);
   }
   
-//  reset(){
-//    this.changed = false;
-//    this.current = 0;
-//    this.show = true;
-//  }
+  reset(){
+    this.changed = false;
+    this.current = 0;
+    this.show = true;
+  }
   
   onclick(){
+    if(this.rollAllowed){
+      this.roll();
+    } else {
+      console.error('Rolling Dice Not Allowed');
+    }
+  }
+  
+  roll(){
     this.show = false;
     var randomArray = [], currentRandom;
     for(var i = 0; i < 1000; i++){
@@ -30,6 +39,7 @@ class dice{
     this.current = random(randomArray);
     this.changed = true;
     setTimeout(()=>{this.show = true;}, 1000);
+    this.rollAllowed = false;
   }
   
   render(){
