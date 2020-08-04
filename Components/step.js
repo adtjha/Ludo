@@ -32,6 +32,20 @@ class Step {
 
   mouseClicked(e) {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y + this.size))) {
+      //Step to which the current piece will move to
+      var stepAhead = this.count + game.dice.current;
+      //Check if any piece is already there, if yes, remove
+      game.squares.forEach(s => {
+        s.players.forEach(p => {
+          if(p.stepLocation === stepAhead && s.count != game.currentIndex){
+            console.log('Found and Removing : '+ p.icon);
+            move({
+              icon: p.icon,
+              count: (-1)*p.stepLocation,
+            })
+          }
+        });
+      });
       game.squares[game.currentIndex].players.forEach(p => {
         //check if player is here,
         if(p.path.count[p.stepLocation] === this.count){
