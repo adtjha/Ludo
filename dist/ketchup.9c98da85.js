@@ -117,149 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"Components/board.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var board = /*#__PURE__*/function () {
-  function board(props) {
-    var _this = this;
-
-    _classCallCheck(this, board);
-
-    //Initialize all the class variables here.
-    this.squares = [];
-    console.log("Board.js is here");
-    var final = [];
-    this.dice = new dice(); //Initializes homeSquares
-
-    props.squares.forEach(function (e, index) {
-      //spacing constant
-      e.spacing = spacing;
-      e.count = index; //creating new square from model SQUARE
-
-      var square = new Square(e); //pushing the newly created homeSquares.
-
-      _this.squares.push(square); //pushing final data into final array.
-
-
-      final.push({
-        color: e.color,
-        location: e.final
-      });
-    }); //Steps Array.
-
-    this.steps = [];
-    var count = 0; //Pushing a new step, and inserting into Array
-
-    props.steps.forEach(function (s) {
-      var step = new Step(s.x, s.y, spacing, count++);
-      var safe = props.safeSteps.filter(function (e) {
-        return e === step.count;
-      });
-
-      if (safe.length > 0) {
-        step.id.safe = true;
-      } else {
-        step.id.safe = false;
-      }
-
-      _this.steps.push(step);
-    }); //Current Player Count
-
-    this.currentIndex = 0; //Setting up start squares.
-
-    this.setSteps(this.squares);
-  }
-
-  _createClass(board, [{
-    key: "setSteps",
-    value: function setSteps(squares) {
-      var _this2 = this;
-
-      squares.forEach(function (e) {
-        //Coloring Start Squares
-        _this2.steps.forEach(function (s) {
-          if (s.x === e.stepStart.x && s.y === e.stepStart.y) {
-            s.update('color', e.color);
-            s.id.type = 'START';
-          }
-        });
-
-        if (e.count === _this2.currentIndex) {
-          _this2.update('switch', {
-            count: _this2.currentIndex
-          });
-        }
-      });
-    }
-  }, {
-    key: "update",
-    value: function update(choice, props) {
-      //update the player's position from here.
-      if (choice === 'move') {
-        this.squares.forEach(function (square) {
-          if (square.color === props.color) {
-            square.update({
-              icon: props.icon,
-              location: props.location
-            });
-          }
-        });
-      } else if (choice === 'switch') {
-        this.squares.forEach(function (square) {
-          square.highlight = false;
-        });
-        this.squares.forEach(function (square) {
-          if (square.count === props.count) {
-            square.highlight = true;
-          }
-        });
-      }
-    }
-  }, {
-    key: "mouseClicked",
-    value: function mouseClicked(e) {
-      this.squares.forEach(function (square) {
-        square.mouseClicked(e);
-      });
-      this.steps.forEach(function (step) {
-        step.mouseClicked(e);
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      this.steps.forEach(function (e) {
-        e.render();
-      });
-      this.squares.forEach(function (e) {
-        if (e.count != _this3.currentIndex) {
-          e.render();
-        }
-      });
-      this.squares[this.currentIndex].render();
-      this.dice.render();
-    }
-  }]);
-
-  return board;
-}();
-
-exports.default = board;
-},{}],"Components/coordinates.js":[function(require,module,exports) {
+})({"Components/coordinates.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -730,19 +588,24 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _ketchup = require("../ketchup.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var dice = /*#__PURE__*/function () {
-  function dice() {
-    _classCallCheck(this, dice);
+var Dice = /*#__PURE__*/function () {
+  function Dice() {
+    _classCallCheck(this, Dice);
 
     //this.location = createVector(x, y, size);
     this.values = [4, 5, 6];
-    this.location = createVector(235, 545);
+    this.location = {
+      x: 235,
+      y: 545
+    };
     this.spacing = 500 / 13;
     this.changed = false;
     this.current = 'D';
@@ -750,7 +613,7 @@ var dice = /*#__PURE__*/function () {
     this.rollAllowed = true;
   }
 
-  _createClass(dice, [{
+  _createClass(Dice, [{
     key: "getRandom",
     value: function getRandom() {
       return random(this.values);
@@ -798,34 +661,41 @@ var dice = /*#__PURE__*/function () {
     value: function render() {
       var _this2 = this;
 
-      push();
+      _ketchup.p5board.push();
 
       if (this.show) {
-        fill('white');
-        rect(this.location.x, this.location.y, this.spacing, this.spacing);
-        fill(0);
-        textSize(32);
-        text(this.current, this.location.x + 10, this.location.y + 30);
+        _ketchup.p5board.fill('white');
+
+        _ketchup.p5board.rect(this.location.x, this.location.y, this.spacing, this.spacing);
+
+        _ketchup.p5board.fill(0);
+
+        _ketchup.p5board.textSize(32);
+
+        _ketchup.p5board.text(this.current, this.location.x + 10, this.location.y + 30);
       }
 
       if (this.changed) {
-        fill(0);
-        textSize(256);
-        text(this.current, 180, 300);
+        _ketchup.p5board.fill(0);
+
+        _ketchup.p5board.textSize(256);
+
+        _ketchup.p5board.text(this.current, 180, 300);
+
         setTimeout(function () {
           _this2.changed = false;
         }, 600);
       }
 
-      pop();
+      _ketchup.p5board.pop();
     }
   }]);
 
-  return dice;
+  return Dice;
 }();
 
-exports.default = dice;
-},{}],"Components/piece.js":[function(require,module,exports) {
+exports.default = Dice;
+},{"../ketchup.js":"ketchup.js"}],"Components/piece.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -833,15 +703,50 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _ketchup = require("../ketchup.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var Piece = /*#__PURE__*/function () {
   function Piece(x, y, home, spacing, icon, path) {
+    var _this = this;
+
     _classCallCheck(this, Piece);
+
+    _defineProperty(this, "render", function (r) {
+      _ketchup.p5board.push(); //Drawing homes for players to be in.
+
+
+      _ketchup.p5board.fill(255);
+
+      if (_this.highlight) {
+        _ketchup.p5board.stroke(_this.color);
+
+        _ketchup.p5board.strokeWeight(5);
+
+        _ketchup.p5board.strokeJoin(ROUND);
+      }
+
+      _ketchup.p5board.rect(_this.home.x * _this.spacing, _this.home.y * _this.spacing, _this.spacing, _this.spacing, 10);
+
+      _ketchup.p5board.pop();
+
+      _ketchup.p5board.push();
+
+      _ketchup.p5board.strokeWeight(3);
+
+      _ketchup.p5board.fill(_this.color);
+
+      _ketchup.p5board.ellipse(_this.location.x + _this.spacing * 0.5, _this.location.y + _this.spacing * 0.5, 0.5 * _this.spacing, 0.5 * _this.spacing);
+
+      _ketchup.p5board.pop();
+    });
 
     this.x = x;
     this.y = y;
@@ -850,7 +755,10 @@ var Piece = /*#__PURE__*/function () {
     this.spacing = spacing;
     this.path = path;
     this.color = 0;
-    this.location = createVector(this.x * spacing, this.y * spacing);
+    this.location = {
+      x: this.x * spacing,
+      y: this.y * spacing
+    };
     this.icon = icon;
     this.selected = false;
     this.stepLocation = 0;
@@ -894,34 +802,13 @@ var Piece = /*#__PURE__*/function () {
         }
       }
     }
-  }, {
-    key: "render",
-    value: function render() {
-      push(); //Drawing homes for players to be in.
-
-      fill(255);
-
-      if (this.highlight) {
-        stroke(this.color);
-        strokeWeight(5);
-        strokeJoin(ROUND);
-      }
-
-      rect(this.home.x * this.spacing, this.home.y * this.spacing, this.spacing, this.spacing, 10);
-      pop();
-      push();
-      strokeWeight(3);
-      fill(this.color);
-      ellipse(this.location.x + this.spacing * 0.5, this.location.y + this.spacing * 0.5, 0.5 * this.spacing, 0.5 * this.spacing);
-      pop();
-    }
   }]);
 
   return Piece;
 }();
 
 exports.default = Piece;
-},{}],"Components/square.js":[function(require,module,exports) {
+},{"../ketchup.js":"ketchup.js"}],"Components/step.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -929,11 +816,181 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _coordinates = require("./coordinates.js");
+
+var _ketchup = require("../ketchup.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Step = /*#__PURE__*/function () {
+  //store the steps template here.
+  function Step(x, y, spacing, count) {
+    var _this = this;
+
+    _classCallCheck(this, Step);
+
+    _defineProperty(this, "render", function () {
+      //render the steps from here.
+      if (_this.count < 48) {
+        _ketchup.p5board.push();
+
+        _ketchup.p5board.fill(_this.color);
+
+        _ketchup.p5board.stroke(1);
+
+        _ketchup.p5board.rect(_this.location.x, _this.location.y, _this.size, _this.size);
+
+        _ketchup.p5board.pop();
+      } else {
+        if (_this.color === 'red') {
+          //Red Triangle goes here.
+          _ketchup.p5board.push();
+
+          _ketchup.p5board.fill(_this.color);
+
+          _ketchup.p5board.stroke(1);
+
+          _ketchup.p5board.triangle(_this.location.x + _this.size * 1.5, _this.location.y + _this.size * 0.5, _this.location.x, _this.location.y - _this.size, _this.location.x, _this.location.y + _this.size * 2);
+
+          _ketchup.p5board.pop();
+        } else if (_this.color === 'green') {
+          //green
+          _ketchup.p5board.push();
+
+          _ketchup.p5board.fill(_this.color);
+
+          _ketchup.p5board.stroke(1);
+
+          _ketchup.p5board.triangle(_this.location.x + _this.size * 0.5, _this.location.y + _this.size * 1.5, _this.location.x + 2 * _this.size, _this.location.y, _this.location.x - _this.size, _this.location.y);
+
+          _ketchup.p5board.pop();
+        } else if (_this.color === 'yellow') {
+          //yellow
+          _ketchup.p5board.push();
+
+          _ketchup.p5board.fill(_this.color);
+
+          _ketchup.p5board.stroke(1);
+
+          _ketchup.p5board.triangle(_this.location.x + _this.size * 0.5, _this.location.y - _this.size * 0.5, _this.location.x - _this.size, _this.location.y + _this.size, _this.location.x + _this.size * 2, _this.location.y + _this.size);
+
+          _ketchup.p5board.pop();
+        } else if (_this.color === 'blue') {
+          //blue
+          _ketchup.p5board.push();
+
+          _ketchup.p5board.fill(_this.color);
+
+          _ketchup.p5board.stroke(1);
+
+          _ketchup.p5board.triangle(_this.location.x - _this.size * 0.5, _this.location.y + _this.size * 0.5, _this.location.x + _this.size, _this.location.y - _this.size, _this.location.x + _this.size, _this.location.y + _this.size * 2);
+
+          _ketchup.p5board.pop();
+        }
+      }
+    });
+
+    //initialize each step here.
+    this.x = x;
+    this.y = y;
+    this.count = count;
+    this.location = {
+      x: x * spacing,
+      y: y * spacing
+    }; //spacing constant.
+
+    this.size = spacing; //color of the step.
+
+    this.color = 255;
+    this.id = {
+      type: _coordinates.COMMON,
+      safe: false
+    };
+  }
+
+  _createClass(Step, [{
+    key: "getLocation",
+    value: function getLocation() {
+      return {
+        x: this.x,
+        y: this.y
+      };
+    }
+  }, {
+    key: "mouseClicked",
+    value: function mouseClicked(e) {
+      var _this2 = this;
+
+      if (e.offsetX > this.location.x && e.offsetX < this.location.x + this.size && e.offsetY > this.location.y && e.offsetY < this.location.y + this.size) {
+        //Step to which the current piece will move to
+        var stepAhead = this.count + game.dice.current; //Check if any piece is already there, if yes, remove
+
+        game.squares.forEach(function (s) {
+          s.players.forEach(function (p) {
+            if (p.stepLocation === stepAhead && s.count != game.currentIndex) {
+              console.log('Found and Removing : ' + p.icon);
+              move({
+                icon: p.icon,
+                count: -1 * p.stepLocation
+              });
+            }
+          });
+        });
+        game.squares[game.currentIndex].players.forEach(function (p) {
+          //check if player is here,
+          if (p.path.count[p.stepLocation] === _this2.count) {
+            //found piece, move it.
+            move({
+              icon: p.icon,
+              count: game.dice.current
+            });
+          }
+        });
+      }
+    }
+  }, {
+    key: "update",
+    value: function update(property, value) {
+      //update the steps from here.
+      this[property] = value;
+    }
+  }]);
+
+  return Step;
+}();
+
+exports.default = Step;
+},{"./coordinates.js":"Components/coordinates.js","../ketchup.js":"ketchup.js"}],"Components/square.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _coordinates = require("./coordinates.js");
+
+var _piece = _interopRequireDefault(require("./piece.js"));
+
+var _step = _interopRequireDefault(require("./step.js"));
+
+var _ketchup = require("../ketchup.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var Square = /*#__PURE__*/function () {
   //store the square template here.
@@ -941,6 +998,49 @@ var Square = /*#__PURE__*/function () {
     var _this = this;
 
     _classCallCheck(this, Square);
+
+    _defineProperty(this, "render", function () {
+      var offset = 1;
+
+      _ketchup.p5board.push(); //Darwing base Squares. using the CORNER method.
+
+
+      _ketchup.p5board.rectMode(_coordinates.CORNER);
+
+      _ketchup.p5board.fill(_this.color); //check if this square's turn.
+
+
+      if (_this.highlight) {
+        offset = 10;
+
+        _ketchup.p5board.stroke(_this.color);
+
+        _ketchup.p5board.strokeWeight(offset);
+
+        _ketchup.p5board.strokeJoin(_coordinates.ROUND);
+
+        _ketchup.p5board.fill(255);
+      }
+
+      _ketchup.p5board.rect(_this.location.x + offset / 4, _this.location.y + offset / 4, _this.size - offset / 2, _this.size - offset / 2);
+
+      _ketchup.p5board.pop();
+
+      _ketchup.p5board.push();
+
+      _this.stepFinal.forEach(function (step) {
+        return step.render();
+      });
+
+      _this.final.render(); //Drawing Players if they are there.
+
+
+      _this.players.forEach(function (p) {
+        return p.render();
+      });
+
+      _ketchup.p5board.pop();
+    });
 
     //initialize the squares from here.
     this.x = props.start.x;
@@ -957,7 +1057,10 @@ var Square = /*#__PURE__*/function () {
     this.players = [];
     this.path = props.path; //this.location = createVector(props.start, props.end);
 
-    this.location = createVector(this.x * this.spacing, this.y * this.spacing);
+    this.location = {
+      x: this.x * this.spacing,
+      y: this.y * this.spacing
+    };
     this.size = props.size * this.spacing; //PATH: starting step of the player
 
     this.stepStart = props.stepStart; //PATH: final step of player
@@ -965,17 +1068,17 @@ var Square = /*#__PURE__*/function () {
     this.stepFinal = []; //Generating Final Squares.
 
     props.stepFinal.forEach(function (f, i) {
-      var finalStep = new Step(f.x, f.y, spacing, i + 44);
+      var finalStep = new _step.default(f.x, f.y, _coordinates.spacing, i + 44);
       finalStep.update('color', _this.color);
       finalStep.update('id', {
-        type: FINAL,
+        type: _coordinates.FINAL,
         safe: true
       });
 
       _this.stepFinal.push(finalStep);
     }); //PATH: pieces which have reached the final succesfuly.
 
-    var final = new Step(props.final.x, props.final.y, spacing, 48);
+    var final = new _step.default(props.final.x, props.final.y, _coordinates.spacing, 48);
     final.update('color', this.color);
     this.final = final;
     props.players.forEach(function (piece) {
@@ -1001,7 +1104,7 @@ var Square = /*#__PURE__*/function () {
           }
         }
       };
-      var newPiece = new Piece(piece.location.x, piece.location.y, piece.home, _this.spacing, piece.icon, path);
+      var newPiece = new _piece.default(piece.location.x, piece.location.y, piece.home, _this.spacing, piece.icon, path);
       newPiece.color = _this.color;
 
       _this.players.push(newPiece);
@@ -1073,42 +1176,13 @@ var Square = /*#__PURE__*/function () {
       });
       this.final.mouseClicked(e);
     }
-  }, {
-    key: "render",
-    value: function render() {
-      var offset = 1;
-      push(); //Darwing base Squares. using the CORNER method.
-
-      rectMode(CORNER);
-      fill(this.color); //check if this square's turn.
-
-      if (this.highlight) {
-        offset = 10;
-        stroke(this.color);
-        strokeWeight(offset);
-        strokeJoin(ROUND);
-        fill(255);
-      }
-
-      rect(this.location.x + offset / 4, this.location.y + offset / 4, this.size - offset / 2, this.size - offset / 2);
-      pop();
-      this.stepFinal.forEach(function (step) {
-        return step.render();
-      });
-      this.final.render(); //Drawing Players if they are there.
-
-      this.players.forEach(function (p) {
-        return p.render();
-      });
-      pop();
-    }
   }]);
 
   return Square;
 }();
 
 exports.default = Square;
-},{}],"Components/step.js":[function(require,module,exports) {
+},{"./coordinates.js":"Components/coordinates.js","./piece.js":"Components/piece.js","./step.js":"Components/step.js","../ketchup.js":"ketchup.js"}],"Components/board.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1116,244 +1190,190 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _coordinates = require("./coordinates.js");
+
+var _dice = _interopRequireDefault(require("./dice.js"));
+
+var _piece = _interopRequireDefault(require("./piece.js"));
+
+var _square = _interopRequireDefault(require("./square.js"));
+
+var _step = _interopRequireDefault(require("./step.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Step = /*#__PURE__*/function () {
-  //store the steps template here.
-  function Step(x, y, spacing, count) {
-    _classCallCheck(this, Step);
+var board = /*#__PURE__*/function () {
+  function board(props) {
+    var _this = this;
 
-    //initialize each step here.
-    this.x = x;
-    this.y = y;
-    this.count = count;
-    this.location = createVector(x * spacing, y * spacing); //spacing constant.
+    _classCallCheck(this, board);
 
-    this.size = spacing; //color of the step.
+    //Initialize all the class variables here.
+    this.squares = [];
+    console.log("Board.js is here");
+    var final = [];
+    this.dice = new _dice.default(); //Initializes homeSquares
 
-    this.color = 255;
-    this.id = {
-      type: COMMON,
-      safe: false
-    };
-    console.log("STEP IMPORTED");
+    props.squares.forEach(function (e, index) {
+      //spacing constant
+      e.spacing = _coordinates.spacing;
+      e.count = index; //creating new square from model SQUARE
+
+      var square = new _square.default(e); //pushing the newly created homeSquares.
+
+      _this.squares.push(square); //pushing final data into final array.
+
+
+      final.push({
+        color: e.color,
+        location: e.final
+      });
+    }); //Steps Array.
+
+    this.steps = [];
+    var count = 0; //Pushing a new step, and inserting into Array
+
+    props.steps.forEach(function (s) {
+      var step = new _step.default(s.x, s.y, _coordinates.spacing, count++);
+      var safe = props.safeSteps.filter(function (e) {
+        return e === step.count;
+      });
+
+      if (safe.length > 0) {
+        step.id.safe = true;
+      } else {
+        step.id.safe = false;
+      }
+
+      _this.steps.push(step);
+    }); //Current Player Count
+
+    this.currentIndex = 0; //Setting up start squares.
+
+    this.setSteps(this.squares);
   }
 
-  _createClass(Step, [{
-    key: "getLocation",
-    value: function getLocation() {
-      return {
-        x: this.x,
-        y: this.y
-      };
+  _createClass(board, [{
+    key: "setSteps",
+    value: function setSteps(squares) {
+      var _this2 = this;
+
+      squares.forEach(function (e) {
+        //Coloring Start Squares
+        _this2.steps.forEach(function (s) {
+          if (s.x === e.stepStart.x && s.y === e.stepStart.y) {
+            s.update('color', e.color);
+            s.id.type = 'START';
+          }
+        });
+
+        if (e.count === _this2.currentIndex) {
+          _this2.update('switch', {
+            count: _this2.currentIndex
+          });
+        }
+      });
     }
   }, {
-    key: "mouseClicked",
-    value: function mouseClicked(e) {
-      var _this = this;
-
-      if (e.offsetX > this.location.x && e.offsetX < this.location.x + this.size && e.offsetY > this.location.y && e.offsetY < this.location.y + this.size) {
-        //Step to which the current piece will move to
-        var stepAhead = this.count + game.dice.current; //Check if any piece is already there, if yes, remove
-
-        game.squares.forEach(function (s) {
-          s.players.forEach(function (p) {
-            if (p.stepLocation === stepAhead && s.count != game.currentIndex) {
-              console.log('Found and Removing : ' + p.icon);
-              move({
-                icon: p.icon,
-                count: -1 * p.stepLocation
-              });
-            }
-          });
-        });
-        game.squares[game.currentIndex].players.forEach(function (p) {
-          //check if player is here,
-          if (p.path.count[p.stepLocation] === _this.count) {
-            //found piece, move it.
-            move({
-              icon: p.icon,
-              count: game.dice.current
+    key: "update",
+    value: function update(choice, props) {
+      //update the player's position from here.
+      if (choice === 'move') {
+        this.squares.forEach(function (square) {
+          if (square.color === props.color) {
+            square.update({
+              icon: props.icon,
+              location: props.location
             });
+          }
+        });
+      } else if (choice === 'switch') {
+        this.squares.forEach(function (square) {
+          square.highlight = false;
+        });
+        this.squares.forEach(function (square) {
+          if (square.count === props.count) {
+            square.highlight = true;
           }
         });
       }
     }
   }, {
-    key: "update",
-    value: function update(property, value) {
-      //update the steps from here.
-      this[property] = value;
+    key: "mouseClicked",
+    value: function mouseClicked(e) {
+      this.squares.forEach(function (square) {
+        square.mouseClicked(e);
+      });
+      this.steps.forEach(function (step) {
+        step.mouseClicked(e);
+      });
     }
   }, {
     key: "render",
     value: function render() {
-      //render the steps from here.
-      if (this.count < 48) {
-        push();
-        fill(this.color);
-        stroke(1);
-        rect(this.location.x, this.location.y, this.size, this.size);
-        pop();
-      } else {
-        if (this.color === 'red') {
-          //Red Triangle goes here.
-          push();
-          fill(this.color);
-          stroke(1);
-          triangle(this.location.x + this.size * 1.5, this.location.y + this.size * 0.5, this.location.x, this.location.y - this.size, this.location.x, this.location.y + this.size * 2);
-          pop();
-        } else if (this.color === 'green') {
-          //green
-          push();
-          fill(this.color);
-          stroke(1);
-          triangle(this.location.x + this.size * 0.5, this.location.y + this.size * 1.5, this.location.x + 2 * this.size, this.location.y, this.location.x - this.size, this.location.y);
-          pop();
-        } else if (this.color === 'yellow') {
-          //yellow
-          push();
-          fill(this.color);
-          stroke(1);
-          triangle(this.location.x + this.size * 0.5, this.location.y - this.size * 0.5, this.location.x - this.size, this.location.y + this.size, this.location.x + this.size * 2, this.location.y + this.size);
-          pop();
-        } else if (this.color === 'blue') {
-          //blue
-          push();
-          fill(this.color);
-          stroke(1);
-          triangle(this.location.x - this.size * 0.5, this.location.y + this.size * 0.5, this.location.x + this.size, this.location.y - this.size, this.location.x + this.size, this.location.y + this.size * 2);
-          pop();
+      var _this3 = this;
+
+      this.steps.forEach(function (e) {
+        e.render();
+      });
+      this.squares.forEach(function (e) {
+        if (e.count != _this3.currentIndex) {
+          e.render();
         }
-      }
+      });
+      this.squares[this.currentIndex].render();
+      this.dice.render();
     }
   }]);
 
-  return Step;
+  return board;
 }();
 
-exports.default = Step;
-},{}],"sketch.js":[function(require,module,exports) {
+exports.default = board;
+},{"./coordinates.js":"Components/coordinates.js","./dice.js":"Components/dice.js","./piece.js":"Components/piece.js","./square.js":"Components/square.js","./step.js":"Components/step.js"}],"ketchup.js":[function(require,module,exports) {
 "use strict";
 
-require("./Components/board.js");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.p5board = void 0;
 
-require("./Components/coordinates.js");
+var _board = _interopRequireDefault(require("./Components/board.js"));
 
-require("./Components/dice.js");
+var _coordinates = require("./Components/coordinates.js");
 
-require("./Components/piece.js");
+var _dice = _interopRequireDefault(require("./Components/dice.js"));
 
-require("./Components/square.js");
+var _piece = _interopRequireDefault(require("./Components/piece.js"));
 
-require("./Components/step.js");
+var _square = _interopRequireDefault(require("./Components/square.js"));
 
-var game = {},
-    i = 0,
-    ludo = {},
-    colors = ['yellow', 'blue', 'green', 'red']; //function preload() {
-//  soundFormats('mp3', 'ogg');
-//  moveSound = loadSound('./Sounds/move');
-//}
+var _step = _interopRequireDefault(require("./Components/step.js"));
 
-function setup() {
-  createCanvas(600, 600);
-  console.log("Sketch.js is here");
-  game = new board(coordinates);
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function draw() {
-  p5.background(255);
-  game.render();
-}
+var sketch = function sketch(s) {
+  s.game = {}, s.i = 0, s.ludo = {}, s.colors = ['yellow', 'blue', 'green', 'red'];
 
-function mouseClicked(e) {
-  var dice = game.dice.location,
-      spacing = game.dice.spacing;
+  s.setup = function () {
+    s.createCanvas(600, 600);
+    s.game = new _board.default(_coordinates.coordinates);
+  };
 
-  if (e.offsetX > dice.x && e.offsetX < dice.x + spacing && e.offsetY > dice.y && e.offsetY < dice.y + spacing) {
-    game.dice.onclick();
-    play(); //    moveSound.play();
-  }
+  s.draw = function () {
+    s.background(140);
+    s.game.render();
+  };
+};
 
-  game.mouseClicked(e);
-}
-
-function play() {
-  var currentSquare = game.squares[game.currentIndex];
-  var currentDice = game.dice.current;
-
-  if (currentSquare.isOut().state) {
-    //atleast one piece is out,
-    if (currentSquare.isOut().count.length === 1 && currentDice != 6) {
-      //only one is out, so move it
-      currentSquare.players.forEach(function (p) {
-        if (p.icon === currentSquare.isOut().count[0]) {
-          console.log('only one is out, so move it');
-          move({
-            icon: p.icon,
-            count: currentDice
-          });
-        }
-      });
-    } else if (currentSquare.isOut().count.length > 1) {
-      //more than one is out, move according to choice.
-      currentSquare.moveAllowed = true;
-    }
-  } else {
-    //none of the pieces are outside.
-    if (currentDice === 6) {
-      currentSquare.moveAllowed = true;
-    } else {
-      switchPlayer();
-    }
-  }
-}
-
-function move(props) {
-  game.squares[game.currentIndex].players.forEach(function (p) {
-    if (p.icon === props.icon) {
-      console.info('Found Piece  : ' + p.icon);
-
-      if (p.stepLocation + props.count + 1 < p.path.count.length) {
-        console.info('MOVING : ' + props.count);
-        p.stepLocation += props.count;
-        p.update('select');
-      }
-    }
-  });
-}
-
-function rollDice(state) {
-  game.dice.rollAllowed = state;
-}
-
-function switchPlayer() {
-  console.log('switching__' + ++i + '  Dice : ' + game.dice.current + '  Color : ' + game.squares[game.currentIndex].color);
-
-  if (game.currentIndex <= 2) {
-    game.currentIndex += 1;
-  } else {
-    game.currentIndex = 0;
-  }
-
-  game.update('switch', {
-    count: game.currentIndex
-  });
-  rollDice(true);
-}
-/*
-Remaining : 
-- Aging Movement - done
-- Multiple Pieces in same step, 
-- killing of one piece by another,
-- Showing Safe Steps,
-- Reset Dice on every Move.
-*/
+var p5board = new p5(sketch);
+exports.p5board = p5board;
 },{"./Components/board.js":"Components/board.js","./Components/coordinates.js":"Components/coordinates.js","./Components/dice.js":"Components/dice.js","./Components/piece.js":"Components/piece.js","./Components/square.js":"Components/square.js","./Components/step.js":"Components/step.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -1558,5 +1578,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","sketch.js"], null)
-//# sourceMappingURL=/sketch.702e4367.js.map
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","ketchup.js"], null)
+//# sourceMappingURL=/ketchup.9c98da85.js.map

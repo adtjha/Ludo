@@ -1,6 +1,12 @@
-import board from './Components/board.js'
+import './Components/board.js'
+import './Components/coordinates.js'
+import './Components/dice.js'
+import './Components/piece.js'
+import './Components/square.js'
+import './Components/step.js'
 
-import p5 from './lib/p5/p5.js'
+
+
 
 var game = {},
   i = 0,
@@ -12,15 +18,15 @@ var game = {},
 //  moveSound = loadSound('./Sounds/move');
 //}
 
-console.log("Skectch.js is here")
 
 function setup() {
   createCanvas(600, 600);
+  console.log("Sketch.js is here")
   game = new board(coordinates);
 }
 
 function draw() {
-  background(255);
+  p5.background(255);
   game.render();
 }
 

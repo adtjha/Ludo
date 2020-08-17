@@ -1,9 +1,8 @@
-import coordinates from './coordinates.js'
+import { coordinates, spacing } from './coordinates.js'
+import Dice from './dice.js'
 import Piece from './piece.js'
 import Square from './square.js'
 import Step from './step.js'
-
-import '../lib/p5/p5.js'
 
 export default class board {
     constructor(props) {
@@ -11,7 +10,7 @@ export default class board {
         this.squares = [];
         console.log("Board.js is here")
         const final = [];
-        this.dice = new dice();
+        this.dice = new Dice();
         //Initializes homeSquares
         props.squares.forEach((e, index) => {
             //spacing constant
