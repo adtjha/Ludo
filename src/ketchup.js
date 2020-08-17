@@ -30,7 +30,7 @@ const sketch = (s) => {
     if ((e.offsetX > dice.x && e.offsetX < dice.x + spacing) && (e.offsetY > dice.y && e.offsetY < dice.y + spacing)) {
       s.game.dice.onclick();
       s.play();
-      //    moveSound.play();
+      //      s.moveSound.play();
     }
     s.game.mouseClicked(e);
   }
