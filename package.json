@@ -1,13 +1,13 @@
 {
   "name": "ludo",
   "version": "1.0.0",
-  "main": "ketchup.js",
+  "main": "index.js",
   "repository": "https://github.com/adtjha/Ludo.git",
   "author": "adtjha <adtjha1@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "build": "parcel build src/index.html --out-dir dist"
   },
   "dependencies": {},
   "devDependencies": {
