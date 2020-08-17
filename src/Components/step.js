@@ -31,26 +31,26 @@ export default class Step {
     if ((e.offsetX > this.location.x && e.offsetX < (this.location.x + this.size)) && (e.offsetY > this.location.y && e.offsetY < (this.location.y +
         this.size))) {
       //Step to which the current piece will move to
-      var stepAhead = this.count + game.dice.current;
+      var stepAhead = this.count + p5board.game.dice.current;
       //Check if any piece is already there, if yes, remove
-      game.squares.forEach(s => {
+      p5board.game.squares.forEach(s => {
         s.players.forEach(p => {
-          if (p.stepLocation === stepAhead && s.count != game.currentIndex) {
+          if (p.stepLocation === stepAhead && s.count != p5board.game.currentIndex) {
             console.log('Found and Removing : ' + p.icon);
-            move({
+            p5board.move({
               icon: p.icon,
               count: (-1) * p.stepLocation,
             })
           }
         });
       });
-      game.squares[game.currentIndex].players.forEach(p => {
+      p5board.game.squares[p5board.game.currentIndex].players.forEach(p => {
         //check if player is here,
         if (p.path.count[p.stepLocation] === this.count) {
           //found piece, move it.
-          move({
+          p5board.move({
             icon: p.icon,
-            count: game.dice.current
+            count: p5board.game.dice.current
           })
         }
       })

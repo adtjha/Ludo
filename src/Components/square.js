@@ -53,7 +53,7 @@ export default class Square {
             return piece.home;
           } else if (count > -1 && count < 44) {
             //steps
-            return game.steps.find(step => count === step.count).getLocation();
+            return p5board.game.steps.find(step => count === step.count).getLocation();
           } else if (count > 43 && count < 47) {
             //final
             return this.stepFinal.find(step => count === step.count).getLocation();
@@ -107,7 +107,7 @@ export default class Square {
           if (this.moveAllowed && p.stepLocation === 0) {
             //check if movement is valid
             console.log('Moving Out Of HOME');
-            move({
+            p5board.move({
               icon: p.icon,
               count: 1
             });

@@ -1,4 +1,4 @@
-
+import { spacing } from './coordinates.js'
 import { p5board } from '../ketchup.js'
 
 export default class Piece {
@@ -25,7 +25,7 @@ export default class Piece {
       //Mouse Clicked.
       console.log('Mouse Clicked on Piece  : ' + this.icon + ',  Move :  ' + game.dice.current);
       if (this.stepLocation > 0) {
-        move({
+        p5board.move({
           icon: this.icon,
           count: game.dice.current
         });
@@ -38,8 +38,8 @@ export default class Piece {
       console.log('updating the location of piece : ' + this.icon);
       this.x = props.x;
       this.y = props.y;
-      this.location = createVector(this.x * spacing, this.y * spacing);
-      switchPlayer();
+      this.location = p5board.createVector(this.x * spacing, this.y * spacing);
+      p5board.switchPlayer();
     } else if (choice === 'select') {
       console.info('selected : ' + this.icon);
       var location = this.path.location(this.path.count[this.stepLocation]);
@@ -47,7 +47,7 @@ export default class Piece {
         this.update('move', location);
       } else {
         console.error('Piece  : ' + this.icon + '  Reached');
-        switchPlayer();
+        p5board.switchPlayer();
       }
     }
   }

@@ -616,7 +616,7 @@ var Dice = /*#__PURE__*/function () {
   _createClass(Dice, [{
     key: "getRandom",
     value: function getRandom() {
-      return random(this.values);
+      return _ketchup.p5board.random(this.values);
     }
   }, {
     key: "reset",
@@ -649,7 +649,7 @@ var Dice = /*#__PURE__*/function () {
         randomArray.push(currentRandom);
       }
 
-      this.current = random(randomArray);
+      this.current = _ketchup.p5board.random(randomArray);
       this.changed = true;
       setTimeout(function () {
         _this.show = true;
@@ -702,6 +702,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+
+var _coordinates = require("./coordinates.js");
 
 var _ketchup = require("../ketchup.js");
 
@@ -773,7 +775,7 @@ var Piece = /*#__PURE__*/function () {
         console.log('Mouse Clicked on Piece  : ' + this.icon + ',  Move :  ' + game.dice.current);
 
         if (this.stepLocation > 0) {
-          move({
+          _ketchup.p5board.move({
             icon: this.icon,
             count: game.dice.current
           });
@@ -788,8 +790,9 @@ var Piece = /*#__PURE__*/function () {
         console.log('updating the location of piece : ' + this.icon);
         this.x = props.x;
         this.y = props.y;
-        this.location = createVector(this.x * spacing, this.y * spacing);
-        switchPlayer();
+        this.location = _ketchup.p5board.createVector(this.x * _coordinates.spacing, this.y * _coordinates.spacing);
+
+        _ketchup.p5board.switchPlayer();
       } else if (choice === 'select') {
         console.info('selected : ' + this.icon);
         var location = this.path.location(this.path.count[this.stepLocation]);
@@ -798,7 +801,8 @@ var Piece = /*#__PURE__*/function () {
           this.update('move', location);
         } else {
           console.error('Piece  : ' + this.icon + '  Reached');
-          switchPlayer();
+
+          _ketchup.p5board.switchPlayer();
         }
       }
     }
@@ -808,7 +812,7 @@ var Piece = /*#__PURE__*/function () {
 }();
 
 exports.default = Piece;
-},{"../ketchup.js":"ketchup.js"}],"Components/step.js":[function(require,module,exports) {
+},{"./coordinates.js":"Components/coordinates.js","../ketchup.js":"ketchup.js"}],"Components/step.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -929,26 +933,28 @@ var Step = /*#__PURE__*/function () {
 
       if (e.offsetX > this.location.x && e.offsetX < this.location.x + this.size && e.offsetY > this.location.y && e.offsetY < this.location.y + this.size) {
         //Step to which the current piece will move to
-        var stepAhead = this.count + game.dice.current; //Check if any piece is already there, if yes, remove
+        var stepAhead = this.count + _ketchup.p5board.game.dice.current; //Check if any piece is already there, if yes, remove
 
-        game.squares.forEach(function (s) {
+        _ketchup.p5board.game.squares.forEach(function (s) {
           s.players.forEach(function (p) {
-            if (p.stepLocation === stepAhead && s.count != game.currentIndex) {
+            if (p.stepLocation === stepAhead && s.count != _ketchup.p5board.game.currentIndex) {
               console.log('Found and Removing : ' + p.icon);
-              move({
+
+              _ketchup.p5board.move({
                 icon: p.icon,
                 count: -1 * p.stepLocation
               });
             }
           });
         });
-        game.squares[game.currentIndex].players.forEach(function (p) {
+
+        _ketchup.p5board.game.squares[_ketchup.p5board.game.currentIndex].players.forEach(function (p) {
           //check if player is here,
           if (p.path.count[p.stepLocation] === _this2.count) {
             //found piece, move it.
-            move({
+            _ketchup.p5board.move({
               icon: p.icon,
-              count: game.dice.current
+              count: _ketchup.p5board.game.dice.current
             });
           }
         });
@@ -1090,7 +1096,7 @@ var Square = /*#__PURE__*/function () {
             return piece.home;
           } else if (count > -1 && count < 44) {
             //steps
-            return game.steps.find(function (step) {
+            return _ketchup.p5board.game.steps.find(function (step) {
               return count === step.count;
             }).getLocation();
           } else if (count > 43 && count < 47) {
@@ -1159,7 +1165,8 @@ var Square = /*#__PURE__*/function () {
             if (_this2.moveAllowed && p.stepLocation === 0) {
               //check if movement is valid
               console.log('Moving Out Of HOME');
-              move({
+
+              _ketchup.p5board.move({
                 icon: p.icon,
                 count: 1
               });
@@ -1362,13 +1369,89 @@ var sketch = function sketch(s) {
   s.game = {}, s.i = 0, s.ludo = {}, s.colors = ['yellow', 'blue', 'green', 'red'];
 
   s.setup = function () {
-    s.createCanvas(600, 600);
+    s.createCanvas(500, 600);
     s.game = new _board.default(_coordinates.coordinates);
   };
 
   s.draw = function () {
     s.background(140);
     s.game.render();
+  };
+
+  s.mouseClicked = function (e) {
+    var dice = s.game.dice.location,
+        spacing = s.game.dice.spacing;
+
+    if (e.offsetX > dice.x && e.offsetX < dice.x + spacing && e.offsetY > dice.y && e.offsetY < dice.y + spacing) {
+      s.game.dice.onclick();
+      s.play(); //    moveSound.play();
+    }
+
+    s.game.mouseClicked(e);
+  };
+
+  s.play = function () {
+    var currentSquare = s.game.squares[s.game.currentIndex];
+    var currentDice = s.game.dice.current;
+
+    if (currentSquare.isOut().state) {
+      //atleast one piece is out,
+      if (currentSquare.isOut().count.length === 1 && currentDice != 6) {
+        //only one is out, so move it
+        currentSquare.players.forEach(function (p) {
+          if (p.icon === currentSquare.isOut().count[0]) {
+            console.log('only one is out, so move it');
+            s.move({
+              icon: p.icon,
+              count: currentDice
+            });
+          }
+        });
+      } else if (currentSquare.isOut().count.length > 1) {
+        //more than one is out, move according to choice.
+        currentSquare.moveAllowed = true;
+      }
+    } else {
+      //none of the pieces are outside.
+      if (currentDice === 6) {
+        currentSquare.moveAllowed = true;
+      } else {
+        s.switchPlayer();
+      }
+    }
+  };
+
+  s.move = function (props) {
+    s.game.squares[s.game.currentIndex].players.forEach(function (p) {
+      if (p.icon === props.icon) {
+        console.info('Found Piece  : ' + p.icon);
+
+        if (p.stepLocation + props.count + 1 < p.path.count.length) {
+          console.info('MOVING : ' + props.count);
+          p.stepLocation += props.count;
+          p.update('select');
+        }
+      }
+    });
+  };
+
+  s.rollDice = function (state) {
+    s.game.dice.rollAllowed = state;
+  };
+
+  s.switchPlayer = function () {
+    console.log('switching__' + ++s.i + '  Dice : ' + s.game.dice.current + '  Color : ' + s.game.squares[s.game.currentIndex].color);
+
+    if (s.game.currentIndex <= 2) {
+      s.game.currentIndex += 1;
+    } else {
+      s.game.currentIndex = 0;
+    }
+
+    s.game.update('switch', {
+      count: s.game.currentIndex
+    });
+    s.rollDice(true);
   };
 };
 

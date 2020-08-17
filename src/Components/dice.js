@@ -16,7 +16,7 @@ export default class Dice {
     this.rollAllowed = true;
   }
   getRandom() {
-    return random(this.values);
+    return p5board.random(this.values);
   }
   reset() {
     this.changed = false;
@@ -39,7 +39,7 @@ export default class Dice {
       this.current = currentRandom;
       randomArray.push(currentRandom);
     }
-    this.current = random(randomArray);
+    this.current = p5board.random(randomArray);
     this.changed = true;
     setTimeout(() => {
       this.show = true;
