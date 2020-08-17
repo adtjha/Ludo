@@ -1374,7 +1374,7 @@ var sketch = function sketch(s) {
   };
 
   s.draw = function () {
-    s.background(140);
+    s.background(255);
     s.game.render();
   };
 

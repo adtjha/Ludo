@@ -20,7 +20,7 @@ const sketch = (s) => {
   }
 
   s.draw = () => {
-    s.background(140);
+    s.background(255);
     s.game.render();
   }
 
