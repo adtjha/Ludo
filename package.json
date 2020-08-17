@@ -1,7 +1,7 @@
 {
   "name": "ludo",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "ketchup.js",
   "repository": "https://github.com/adtjha/Ludo.git",
   "author": "adtjha <adtjha1@gmail.com>",
   "license": "MIT",
