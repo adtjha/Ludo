@@ -17,18 +17,34 @@
       padding: 0;
       margin: 0;
     }
-    
-    h1{
+
+    h1 {
       font-family: sans-serif;
     }
-    
-    main, h1{
+
+    main,
+    h1 {
       margin: auto;
     }
 
     canvas {
       display: block;
       margin: auto;
+    }
+
+    @media only screen and (max-width: 600px) {
+      h1 {
+        font-size: 64px;
+        margin: 40px auto;
+      }
+
+      main {
+        margin: 340px 0;
+      }
+
+      main>canvas {
+        transform: scale(2);
+      }
     }
 
   </style>
@@ -38,7 +54,7 @@
 
 <body>
   <h1>Ludo Web App</h1>
-  
+
 </body>
 
 </html>
