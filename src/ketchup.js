@@ -14,9 +14,10 @@ const sketch = (s) => {
     s.ludo = {},
     s.colors = ['yellow', 'blue', 'green', 'red'];
 
-  s.setup = () => {
+  s.setup = async () => {
     s.createCanvas(500, 600);
     s.game = new board(coordinates);
+    let permission = await Notification.requestPermission();
   }
 
   s.draw = () => {
