@@ -12,6 +12,3 @@ Ludo (from Latin ludo, meaning 'I play') is a strategy board game for two to fou
   - Steps ,
   - Piece, etc.
 - Creating a logic so that all the above can act together, and replicate a normal Ludo session.
-
-## Current Status
-I am trying to integrate Parcel Js, in order to make the project, much more proper according to today's industry standards.
